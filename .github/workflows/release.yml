@@ -10,7 +10,7 @@ name: Release
 on:
   push:
     branches:
-      - trunk
+      - bugfix/DIS-521-unecessary-tags
 
 env:
   HUSKY: 0
