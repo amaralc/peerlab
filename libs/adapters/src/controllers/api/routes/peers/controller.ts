@@ -34,7 +34,7 @@ export class PeersRestController {
 
   @Get('/mock')
   async getMock() {
-    return { peers: [{ id: 'mock-peer', name: 'mock-peer', url: 'mock-peer' }] };
+    return { peers: [{ id: 'mock-peer', name: 'mock-peer', url: 'mock-peer', isMock: true }] };
   }
 
   @Delete()
