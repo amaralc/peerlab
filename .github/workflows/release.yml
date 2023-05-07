@@ -11,7 +11,7 @@ name: Release
 on:
   push:
     branches:
-      - trunk
+      - bugfix/DIS-522-fly-app-already-exists
 
 # Set environment variable to disable Husky
 env:
@@ -144,21 +144,21 @@ jobs:
           git remote set-url origin "https://${{ secrets.GH_ACTIONS_PERSONAL_ACCESS_TOKEN }}@github.com/amaralc/peerlab.git"
           git remote -v
 
-      - name: Release Step
-        if: ${{ success() && (github.event_name != 'pull_request' || github.event.action == 'closed' && github.event.pull_request.merged == true) }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_PERSONAL_ACCESS_TOKEN }}
-          NPM_TOKEN: ${{ secrets.GH_ACTIONS_PERSONAL_ACCESS_TOKEN }}
-        run: |
-          git status
-          git diff
-          yarn git:discard:all
-          git status
-          git diff
-          git config --global user.name "${{ github.actor }}"
-          git config --global user.email "${{ github.actor}}@users.noreply.github.com"
-          # echo "//npm.pkg.github.com/:_authToken=${{ secrets.GH_ACTIONS_PERSONAL_ACCESS_TOKEN }}" >> .npmrc
-          yarn release
+      # - name: Release Step
+      #   if: ${{ success() && (github.event_name != 'pull_request' || github.event.action == 'closed' && github.event.pull_request.merged == true) }}
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_PERSONAL_ACCESS_TOKEN }}
+      #     NPM_TOKEN: ${{ secrets.GH_ACTIONS_PERSONAL_ACCESS_TOKEN }}
+      #   run: |
+      #     git status
+      #     git diff
+      #     yarn git:discard:all
+      #     git status
+      #     git diff
+      #     git config --global user.name "${{ github.actor }}"
+      #     git config --global user.email "${{ github.actor}}@users.noreply.github.com"
+      #     # echo "//npm.pkg.github.com/:_authToken=${{ secrets.GH_ACTIONS_PERSONAL_ACCESS_TOKEN }}" >> .npmrc
+      #     yarn release
 
       - name: Configure Fly CLI
         run: |
