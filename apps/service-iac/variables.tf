@@ -15,3 +15,10 @@ variable "fly_api_token" {
   type        = string
   sensitive   = true
 }
+
+variable "gcp_credentials_json" {
+  description = "GCP credentials JSON"
+  type        = string
+  sensitive   = true
+}
+

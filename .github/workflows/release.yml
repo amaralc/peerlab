@@ -165,11 +165,16 @@ jobs:
           mkdir -p ~/.fly
           echo "api_key = \"$FLY_API_TOKEN\"" > ~/.fly/config.toml
 
-      # https://github.com/google-github-actions/setup-gcloud
-      - name: "Setup GCP SKD Auth"
-        run: |
-          echo '${{ secrets.GCP_STORAGE_SERVICE_ACCOUNT_KEYS }}' > gcp_sa_key.json
-          echo "GOOGLE_APPLICATION_CREDENTIALS=$(pwd)/gcp_sa_key.json" >> $GITHUB_ENV
+      - id: "auth"
+        uses: "google-github-actions/auth@v1"
+        with:
+          credentials_json: "${{ secrets.GCP_CREDENTIALS }}"
+
+      # # https://github.com/google-github-actions/setup-gcloud
+      # - name: "Setup GCP SKD Auth"
+      #   run: |
+      #     echo '${{ secrets.GCP_STORAGE_SERVICE_ACCOUNT_KEYS }}' > gcp_sa_key.json
+      #     echo "GOOGLE_APPLICATION_CREDENTIALS=$(pwd)/gcp_sa_key.json" >> $GITHUB_ENV
 
       - name: "Set up Cloud SDK"
         uses: "google-github-actions/setup-gcloud@v1"
