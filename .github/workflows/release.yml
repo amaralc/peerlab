@@ -11,7 +11,7 @@ name: Release
 on:
   push:
     branches:
-      - bugfix/DIS-521-unecessary-tags
+      - trunk
 
 # Set environment variable to disable Husky
 env:
