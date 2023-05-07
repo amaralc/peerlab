@@ -182,12 +182,14 @@ jobs:
       #     terraform validate
       #     terraform plan -out=tfplan
 
-      - name: Set up Google Cloud SDK
-        uses: google-github-actions/setup-gcloud@v1
+      # https://github.com/google-github-actions/setup-gcloud
+      - name: "Setup GCP SKD Auth"
+        uses: "google-github-actions/auth@v1"
         with:
-          project_id: ${{ secrets.GCP_PROJECT_ID }}
-          service_account_key: ${{ secrets.GCP_SA_KEY }}
-          export_default_credentials: true
+          credentials_json: "${{ secrets.GCP_STORAGE_SERVICE_ACCOUNT_KEYS }}"
+
+      - name: "Set up Cloud SDK"
+        uses: "google-github-actions/setup-gcloud@v1"
 
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v1
