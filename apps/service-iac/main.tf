@@ -1,3 +1,11 @@
+terraform {
+  backend "gcs" {
+    bucket      = "peerlab-terraform-state"
+    prefix      = "terraform/state"
+    credentials = "path/to/your/credentials.json"
+  }
+}
+
 # Configure the Fly provider
 provider "fly" {
   useinternaltunnel    = true
