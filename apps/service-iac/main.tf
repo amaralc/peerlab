@@ -1,8 +1,7 @@
 terraform {
   backend "gcs" {
-    bucket      = "peerlab-terraform-state"
-    prefix      = "terraform/state"
-    credentials = file(getenv("GCP_STORAGE_SERVICE_ACCOUNT_KEYS"))
+    bucket = "peerlab-terraform-state"
+    prefix = "terraform/state"
   }
 }
 
