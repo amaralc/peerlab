@@ -206,8 +206,6 @@ jobs:
           echo "Running terraform init..."
           terraform init
         working-directory: apps/service-iac
-        with:
-          credentials_json: ${{ secrets.GCP_STORAGE_SERVICE_ACCOUNT_KEYS }}
 
       - name: Terraform validate
         run: |
