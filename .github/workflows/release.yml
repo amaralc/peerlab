@@ -139,31 +139,31 @@ jobs:
       #     echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> .npmrc
       #     yarn publish:libs
 
-      - name: Set Remote URL
-        run: |
-          git remote set-url origin "https://${{ secrets.GH_ACTIONS_PERSONAL_ACCESS_TOKEN }}@github.com/amaralc/peerlab.git"
-          git remote -v
+      # - name: Set Remote URL
+      #   run: |
+      #     git remote set-url origin "https://${{ secrets.GH_ACTIONS_PERSONAL_ACCESS_TOKEN }}@github.com/amaralc/peerlab.git"
+      #     git remote -v
 
-      - name: Release Step
-        if: ${{ success() && (github.event_name != 'pull_request' || github.event.action == 'closed' && github.event.pull_request.merged == true) }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_PERSONAL_ACCESS_TOKEN }}
-          NPM_TOKEN: ${{ secrets.GH_ACTIONS_PERSONAL_ACCESS_TOKEN }}
-        run: |
-          git status
-          git diff
-          yarn git:discard:all
-          git status
-          git diff
-          git config --global user.name "${{ github.actor }}"
-          git config --global user.email "${{ github.actor}}@users.noreply.github.com"
-          # echo "//npm.pkg.github.com/:_authToken=${{ secrets.GH_ACTIONS_PERSONAL_ACCESS_TOKEN }}" >> .npmrc
-          yarn release
+      # - name: Release Step
+      #   if: ${{ success() && (github.event_name != 'pull_request' || github.event.action == 'closed' && github.event.pull_request.merged == true) }}
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_PERSONAL_ACCESS_TOKEN }}
+      #     NPM_TOKEN: ${{ secrets.GH_ACTIONS_PERSONAL_ACCESS_TOKEN }}
+      #   run: |
+      #     git status
+      #     git diff
+      #     yarn git:discard:all
+      #     git status
+      #     git diff
+      #     git config --global user.name "${{ github.actor }}"
+      #     git config --global user.email "${{ github.actor}}@users.noreply.github.com"
+      #     # echo "//npm.pkg.github.com/:_authToken=${{ secrets.GH_ACTIONS_PERSONAL_ACCESS_TOKEN }}" >> .npmrc
+      #     yarn release
 
-      - name: Configure Fly CLI
-        run: |
-          mkdir -p ~/.fly
-          echo "api_key = \"$FLY_API_TOKEN\"" > ~/.fly/config.toml
+      # - name: Configure Fly CLI
+      #   run: |
+      #     mkdir -p ~/.fly
+      #     echo "api_key = \"$FLY_API_TOKEN\"" > ~/.fly/config.toml
 
       # - id: "auth"
       #   uses: "google-github-actions/auth@v1"
@@ -174,9 +174,12 @@ jobs:
       - name: "Setup GCP SKD Auth"
         run: |
           pwd
+          ls
           echo "-----------------------------------------------------------------"
-          echo '${{ secrets.GCP_STORAGE_SERVICE_ACCOUNT_KEYS }}' > credentials.json
-          echo "GOOGLE_APPLICATION_CREDENTIALS=$(pwd)/credentials.json" >> $GITHUB_ENV
+          echo '${{ secrets.GCP_STORAGE_SERVICE_ACCOUNT_KEYS }}' > apps/service-iac/credentials.json
+          cd apps/service-iac
+          ls
+          # echo "GOOGLE_APPLICATION_CREDENTIALS=$(pwd)/credentials.json" >> $GITHUB_ENV
 
       # - name: "Set up Cloud SDK"
       #   uses: "google-github-actions/setup-gcloud@v1"
