@@ -1,3 +1,13 @@
+terraform {
+  cloud {
+    organization = "Peerlab"
+
+    workspaces {
+      name = "Peerlab"
+    }
+  }
+}
+
 # Configure the Fly provider
 provider "fly" {
   useinternaltunnel    = true
