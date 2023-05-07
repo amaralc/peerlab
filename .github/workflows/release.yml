@@ -11,7 +11,7 @@ name: Release
 on:
   push:
     branches:
-      - bugfix/DIS-522-fly-app-already-exists
+      - bugfix/DIS-522-configure-terraform-state-storage-and-retrieval
 
 # Set environment variable to disable Husky
 env:
