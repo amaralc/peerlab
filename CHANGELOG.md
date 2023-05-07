@@ -3,22 +3,6 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-## [0.7.1](https://github.com/amaralc/peerlab/compare/micro-applications-template@0.7.0...micro-applications-template@0.7.1) (2023-05-07)
-
-### Bug Fixes
-
-- add autoaprove ([f0a76bd](https://github.com/amaralc/peerlab/commit/f0a76bdd9086d5ef57d61d51e1841df189337d99))
-- add filename ([a014c35](https://github.com/amaralc/peerlab/commit/a014c353274ec4c9aaeadc198908f09ed5d59127))
-- add gcp credentials ([4c25237](https://github.com/amaralc/peerlab/commit/4c25237ccf47b4307144857e43a62a29163b3abb))
-- add providers to image ([af6d24b](https://github.com/amaralc/peerlab/commit/af6d24b5a53ed616a7568d78df90866700642c14))
-- adjust addres ([5f183a1](https://github.com/amaralc/peerlab/commit/5f183a169af7c4f2a9d53dba7ce3e2d4c82cafc3))
-- log working directory ([17c1097](https://github.com/amaralc/peerlab/commit/17c1097e99bd6b479a3579df377a80adbffbffb3))
-
-### Reverts
-
-- Revert "Revert "fix: remove fixed env vars in image"" ([d01c968](https://github.com/amaralc/peerlab/commit/d01c96847de30b3c9204c7c874bd26ff1d62ce3d))
-- Revert "Revert "fix(DIS-522): configure terraform state storage and retrieval (#4)"" ([80328dd](https://github.com/amaralc/peerlab/commit/80328dd0a1adbd9b38c4bf894ec4d324afe90173)), closes [#4](https://github.com/amaralc/peerlab/issues/4)
-
 ## [0.7.0](https://github.com/amaralc/peerlab/compare/micro-applications-template@0.6.16...micro-applications-template@0.7.0) (2023-05-07)
 
 ### Features

@@ -3,12 +3,6 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-## [0.2.17](https://github.com/amaralc/peerlab/compare/adapters@0.2.16...adapters@0.2.17) (2023-05-07)
-
-### Reverts
-
-- Revert "Revert "fix(DIS-522): configure terraform state storage and retrieval (#4)"" ([80328dd](https://github.com/amaralc/peerlab/commit/80328dd0a1adbd9b38c4bf894ec4d324afe90173)), closes [#4](https://github.com/amaralc/peerlab/issues/4)
-
 ## [0.2.16](https://github.com/amaralc/peerlab/compare/adapters@0.2.15...adapters@0.2.16) (2023-05-07)
 
 ### Reverts
