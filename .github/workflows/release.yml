@@ -11,7 +11,7 @@ name: Release
 on:
   push:
     branches:
-      - bugfix/DIS-522-configure-terraform-state-storage-and-retrieval
+      - trunk
 
 # Set environment variable to disable Husky
 env:
@@ -144,49 +144,32 @@ jobs:
           git remote set-url origin "https://${{ secrets.GH_ACTIONS_PERSONAL_ACCESS_TOKEN }}@github.com/amaralc/peerlab.git"
           git remote -v
 
-      # - name: Release Step
-      #   if: ${{ success() && (github.event_name != 'pull_request' || github.event.action == 'closed' && github.event.pull_request.merged == true) }}
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_PERSONAL_ACCESS_TOKEN }}
-      #     NPM_TOKEN: ${{ secrets.GH_ACTIONS_PERSONAL_ACCESS_TOKEN }}
-      #   run: |
-      #     git status
-      #     git diff
-      #     yarn git:discard:all
-      #     git status
-      #     git diff
-      #     git config --global user.name "${{ github.actor }}"
-      #     git config --global user.email "${{ github.actor}}@users.noreply.github.com"
-      #     # echo "//npm.pkg.github.com/:_authToken=${{ secrets.GH_ACTIONS_PERSONAL_ACCESS_TOKEN }}" >> .npmrc
-      #     yarn release
+      - name: Release Step
+        if: ${{ success() && (github.event_name != 'pull_request' || github.event.action == 'closed' && github.event.pull_request.merged == true) }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_ACTIONS_PERSONAL_ACCESS_TOKEN }}
+          NPM_TOKEN: ${{ secrets.GH_ACTIONS_PERSONAL_ACCESS_TOKEN }}
+        run: |
+          git status
+          git diff
+          yarn git:discard:all
+          git status
+          git diff
+          git config --global user.name "${{ github.actor }}"
+          git config --global user.email "${{ github.actor}}@users.noreply.github.com"
+          # echo "//npm.pkg.github.com/:_authToken=${{ secrets.GH_ACTIONS_PERSONAL_ACCESS_TOKEN }}" >> .npmrc
+          yarn release
 
       - name: Configure Fly CLI
         run: |
           mkdir -p ~/.fly
           echo "api_key = \"$FLY_API_TOKEN\"" > ~/.fly/config.toml
 
-      # - name: Setup Terraform
-      #   uses: hashicorp/setup-terraform@v1
-      #   with:
-      #     terraform_version: 1.3.9 # Update this to the desired Terraform version
-      # - name: Terraform Apply
-      #   if: ${{ success() && (github.event_name != 'pull_request' || github.event.action == 'closed' && github.event.pull_request.merged == true) }}
-      #   env:
-      #     FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
-      #     TF_VAR_database_url: ${{ secrets.TF_VAR_database_url }}
-      #     TF_VAR_direct_url: ${{ secrets.TF_VAR_direct_url }}
-      #   run: |
-      #     cd apps/service-iac
-      #     terraform init
-      #     terraform validate
-      #     terraform plan -out=tfplan
       # https://github.com/google-github-actions/setup-gcloud
       - name: "Setup GCP SKD Auth"
         run: |
           echo '${{ secrets.GCP_STORAGE_SERVICE_ACCOUNT_KEYS }}' > gcp_sa_key.json
           echo "GOOGLE_APPLICATION_CREDENTIALS=$(pwd)/gcp_sa_key.json" >> $GITHUB_ENV
-        # with:
-        #   credentials_json: "${{ secrets.GCP_STORAGE_SERVICE_ACCOUNT_KEYS }}"
 
       - name: "Set up Cloud SDK"
         uses: "google-github-actions/setup-gcloud@v1"
