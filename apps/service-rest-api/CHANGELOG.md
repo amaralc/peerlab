@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.1](https://github.com/amaralc/peerlab/compare/service-rest-api@0.3.0...service-rest-api@0.3.1) (2023-05-07)
+
+### Bug Fixes
+
+- add providers to image ([af6d24b](https://github.com/amaralc/peerlab/commit/af6d24b5a53ed616a7568d78df90866700642c14))
+
+### Reverts
+
+- Revert "Revert "fix: remove fixed env vars in image"" ([d01c968](https://github.com/amaralc/peerlab/commit/d01c96847de30b3c9204c7c874bd26ff1d62ce3d))
+
 ## [0.3.0](https://github.com/amaralc/peerlab/compare/service-rest-api@0.2.18...service-rest-api@0.3.0) (2023-05-07)
 
 ### Features
