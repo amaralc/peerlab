@@ -169,6 +169,8 @@ jobs:
         id: "auth"
         uses: "google-github-actions/auth@v1"
         with:
+          # https://github.com/google-github-actions/setup-gcloud/issues/553#issuecomment-1118837030
+          token_format: "access_token"
           credentials_json: "${{ secrets.GCP_STORAGE_SERVICE_ACCOUNT_KEYS }}"
 
       - name: Save GCP credentials to file
