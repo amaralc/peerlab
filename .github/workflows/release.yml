@@ -165,7 +165,8 @@ jobs:
           mkdir -p ~/.fly
           echo "api_key = \"$FLY_API_TOKEN\"" > ~/.fly/config.toml
 
-      - id: "auth"
+      - name: Google Auth
+        id: "auth"
         uses: "google-github-actions/auth@v1"
         with:
           credentials_json: "${{ secrets.GCP_STORAGE_SERVICE_ACCOUNT_KEYS }}"
