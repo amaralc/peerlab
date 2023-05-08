@@ -1,8 +1,8 @@
 terraform {
   backend "gcs" {
-    bucket = "peerlab-terraform-state"
-    prefix = "terraform/state"
-    # credentials = "credentials.json"
+    bucket      = "peerlab-terraform-state"
+    prefix      = "terraform/state"
+    credentials = "credentials.json"
   }
 }
 
