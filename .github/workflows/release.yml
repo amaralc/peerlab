@@ -172,7 +172,8 @@ jobs:
           credentials_json: "${{ secrets.GCP_STORAGE_SERVICE_ACCOUNT_KEYS }}"
 
       - name: Save GCP credentials to file
-        run: echo '${{ secrets.GCP_STORAGE_SERVICE_ACCOUNT_KEYS }}' > apps/service-iac/credentials.json
+        # Replace the newline escape characters (\\n) with the actual newline characters (\n) and save JSON content to a file
+        run: echo '${{ secrets.GCP_STORAGE_SERVICE_ACCOUNT_KEYS }}' | sed 's/\\n/\n/g' > apps/service-iac/credentials.json
 
       # # https://github.com/google-github-actions/setup-gcloud
       # - name: "Setup GCP SKD Auth"
