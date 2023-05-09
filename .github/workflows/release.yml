@@ -165,10 +165,13 @@ jobs:
       #     mkdir -p ~/.fly
       #     echo "api_key = \"$FLY_API_TOKEN\"" > ~/.fly/config.toml
 
+      - name: Install jq
+        run: sudo apt-get install jq
+
       - name: Save GCP credentials to file
         # Escape double quotes in the JSON key file before saving it to a file
         run: |
-          echo "${{ secrets.GCP_STORAGE_SERVICE_ACCOUNT_KEYS }}" | sed 's/"/\\"/g' > apps/service-iac/credentials.json
+          echo "${{ secrets.GCP_STORAGE_SERVICE_ACCOUNT_KEYS }}" | jq '.' > apps/service-iac/credentials.json
 
       - id: "auth"
         name: "Authenticate to Google Cloud"
@@ -176,6 +179,7 @@ jobs:
         with:
           # https://github.com/google-github-actions/setup-gcloud
           # https://stackoverflow.com/questions/74388673/cant-authenticate-google-cloud-with-service-key-on-github-actions-unexpected
+          # credentials_json: ${{ secrets.GCP_STORAGE_SERVICE_ACCOUNT_KEYS }}
           credentials_json: ${{ secrets.GCP_STORAGE_SERVICE_ACCOUNT_KEYS }}
 
       - name: "Set up Cloud SDK"
