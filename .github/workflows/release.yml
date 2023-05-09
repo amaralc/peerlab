@@ -167,7 +167,13 @@ jobs:
 
       - name: Save GCP credentials to file
         run: |
-          printf '%s\n' "${{ secrets.GCP_STORAGE_SERVICE_ACCOUNT_KEYS }}" > apps/service-iac/credentials.json
+          echo "${{ secrets.GCP_STORAGE_SERVICE_ACCOUNT_KEYS }}" > apps/service-iac/credentials.json
+
+      # - id: "auth"
+      #   name: "Authenticate to Google Cloud"
+      #   uses: "google-github-actions/auth@v1"
+      #   with:
+      #     credentials_json: ${{ secrets.GOOGLE_CREDENTIALS }}
 
       - name: Google Auth
         id: "auth"
@@ -175,7 +181,7 @@ jobs:
         with:
           # https://github.com/google-github-actions/setup-gcloud/issues/553#issuecomment-1118837030
           token_format: "access_token"
-          credentials_json: "$apps/service-iac/credentials.json"
+          credentials_json: "apps/service-iac/credentials.json"
 
       # # https://github.com/google-github-actions/setup-gcloud
       # - name: "Setup GCP SKD Auth"
