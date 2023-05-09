@@ -171,6 +171,7 @@ jobs:
       - name: Save GCP credentials to file
         # Escape double quotes in the JSON key file before saving it to a file
         run: |
+          echo "${{ secrets.GCP_STORAGE_SERVICE_ACCOUNT_KEYS }}"
           echo "${{ secrets.GCP_STORAGE_SERVICE_ACCOUNT_KEYS }}" | jq '.' > apps/service-iac/credentials.json
 
       - id: "auth"
