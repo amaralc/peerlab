@@ -166,8 +166,9 @@ jobs:
       #     echo "api_key = \"$FLY_API_TOKEN\"" > ~/.fly/config.toml
 
       - name: Save GCP credentials to file
+        # Escape double quotes in the JSON key file before saving it to a file
         run: |
-          echo "${{ secrets.GCP_STORAGE_SERVICE_ACCOUNT_KEYS }}" > apps/service-iac/credentials.json
+          echo "${{ secrets.GCP_STORAGE_SERVICE_ACCOUNT_KEYS }}" | sed 's/"/\\"/g' > apps/service-iac/credentials.json
 
       - id: "auth"
         name: "Authenticate to Google Cloud"
