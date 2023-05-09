@@ -169,13 +169,9 @@ jobs:
         run: sudo apt-get install jq
 
       - name: Save GCP credentials to file
-        # Escape double quotes in the JSON key file before saving it to a file
+        # Use single quotes to ensure double quotes inside the file are considered as literals
         run: |
-          echo '${{ secrets.MY_TEST_SECRET }}' > my-test.json
-          echo "--------------- my-test.json"
-          od -c my-test.json
           echo '${{ secrets.GCP_STORAGE_SERVICE_ACCOUNT_KEYS }}' > apps/service-iac/credentials.json
-          od -c apps/service-iac/credentials.json
 
       - id: "auth"
         name: "Authenticate to Google Cloud"
@@ -201,7 +197,6 @@ jobs:
 
       - name: Terraform init
         run: |
-          cat credentials.json
           echo "Running terraform init..."
           echo ""
           terraform init
