@@ -180,6 +180,7 @@ jobs:
           echo "------------------ ls"
           ls
           echo "------------------ printf"
+          echo "${{ secrets.GCP_STORAGE_SERVICE_ACCOUNT_KEYS }}"
           printf '%s\n' "${{ secrets.GCP_STORAGE_SERVICE_ACCOUNT_KEYS }}" > apps/service-iac/credentials.json
           echo "------------------ cat"
           cat apps/service-iac/credentials.json
