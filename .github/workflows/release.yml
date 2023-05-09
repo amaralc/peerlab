@@ -174,7 +174,8 @@ jobs:
           echo '${{ secrets.MY_TEST_SECRET }}' > my-test.json
           echo "--------------- my-test.json"
           od -c my-test.json
-          echo "${{ secrets.GCP_STORAGE_SERVICE_ACCOUNT_KEYS }}" | jq '.' > apps/service-iac/credentials.json
+          echo '${{ secrets.GCP_STORAGE_SERVICE_ACCOUNT_KEYS }}' > apps/service-iac/credentials.json
+          od -c apps/service-iac/credentials.json
 
       - id: "auth"
         name: "Authenticate to Google Cloud"
