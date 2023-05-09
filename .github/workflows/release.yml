@@ -167,8 +167,6 @@ jobs:
 
       - name: Save GCP credentials to file
         run: |
-          echo "------------------ pwd"
-          pwd
           echo "------------------ ls"
           ls
           echo "------------------ printf"
