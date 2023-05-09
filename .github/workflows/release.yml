@@ -167,7 +167,7 @@ jobs:
 
       - name: Save GCP credentials to file
         run: |
-          echo"${{ secrets.GCP_STORAGE_SERVICE_ACCOUNT_KEYS }}" > apps/service-iac/credentials.json
+          echo "${{ secrets.GCP_STORAGE_SERVICE_ACCOUNT_KEYS }}" > apps/service-iac/credentials.json
 
       - name: Google Auth
         id: "auth"
