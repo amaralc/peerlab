@@ -13,10 +13,11 @@ import { ApiKeyGuard } from './guards/api-key.guard';
 const setupOpenApi = (app: INestApplication) => {
   // Setting up Swagger document
   const options = new DocumentBuilder()
-    .setTitle('nestjs-template-service rest-api')
-    .setDescription('NestJS Template Service Description')
-    .setVersion('1.0')
+    .setTitle('Peers RESTful API')
+    .setDescription('An API to find peers for your research project')
+    .setVersion('0.3.0')
     .build();
+
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('docs', app, document);
 };
