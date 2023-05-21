@@ -118,7 +118,7 @@ resource "google_cloudbuild_trigger" "apps_researchers_peers" {
     }
   }
 
-  # List of file/directory patterns in the source repository that are included in the source. Here, it includes all files and directories.
+  # Included files for the trigger
   included_files = ["apps/researchers/peers/**", "libs/researchers/peers/**"]
 
   # Defines the build configuration
