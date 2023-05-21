@@ -23,10 +23,31 @@ locals {
   image_tag = trimspace(data.local_file.commit_hash.content)
 }
 
+# This block creates a new service account
 resource "google_service_account" "researchers-peers-svc" {
-  account_id   = local.app_name
-  display_name = "Service admin account"
-  project      = var.project_id
+  # The service account's identifier within the project
+  account_id = local.app_name
+
+  # The display name for the service account (optional)
+  display_name = "Researchers Peers Service Account"
+
+  # The ID of the project that the service account will be created in
+  project = var.project_id
+}
+
+# This block adds the Secret Manager Secret Accessor role to the service account
+resource "google_project_iam_binding" "secret_accessor" {
+  # The ID of the project
+  project = var.project_id
+
+  # The role to be granted. "roles/secretmanager.secretAccessor" allows read access to Secret Manager secrets
+  role = "roles/secretmanager.secretAccessor"
+
+  # List of members (users, groups, service accounts, etc) that will be granted the role
+  members = [
+    # The service account to which the role will be granted
+    "serviceAccount:${google_service_account.researchers-peers-svc.email}",
+  ]
 }
 
 resource "google_project_iam_member" "service_account_user" {
