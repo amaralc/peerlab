@@ -92,6 +92,38 @@ data "google_secret_manager_secret_version" "researchers-peers-svc_access_secret
   depends_on = [google_secret_manager_secret_version.researchers-peers-svc-secret-v1]
 }
 
+# Create a secret in Google Secret Manager for the database URL
+resource "google_secret_manager_secret" "database_url_secret" {
+  secret_id = "database-url-secret" # Define the ID of the secret
+  project   = var.project_id        # Define the project where the secret should be created
+
+  replication {
+    automatic = true # Ensure the secret is replicated across all regions
+  }
+}
+
+# Add the database URL as a secret version
+resource "google_secret_manager_secret_version" "database_url_secret_v1" {
+  secret      = google_secret_manager_secret.database_url_secret.id # Link the secret version to the secret
+  secret_data = var.database_url                                    # Set the value of the secret from the database_url variable
+}
+
+# Create a secret in Google Secret Manager for the direct URL
+resource "google_secret_manager_secret" "direct_url_secret" {
+  secret_id = "direct-url-secret" # Define the ID of the secret
+  project   = var.project_id      # Define the project where the secret should be created
+
+  replication {
+    automatic = true # Ensure the secret is replicated across all regions
+  }
+}
+
+# Add the direct URL as a secret version
+resource "google_secret_manager_secret_version" "direct_url_secret_v1" {
+  secret      = google_secret_manager_secret.direct_url_secret.id # Link the secret version to the secret
+  secret_data = var.direct_url                                    # Set the value of the secret from the direct_url variable
+}
+
 # This resource block defines a Google Cloud Build trigger that will react to pushes on the branch "feature/DIS-522-move-to-gcp"
 resource "google_cloudbuild_trigger" "apps_researchers_peers" {
   # Name of the trigger
@@ -174,6 +206,28 @@ resource "google_cloud_run_service" "apps_researchers_peers" {
       containers {
         # The docker image is pulled from GCR using the project ID, app name and the image tag which corresponds to the commit hash
         image = "gcr.io/${google_cloudbuild_trigger.apps_researchers_peers.project}/${local.app_name}:latest"
+
+        # Set the DATABASE_URL environment variable from the database URL secret
+        env {
+          name = "DATABASE_URL"
+          value_from {
+            secret_key_ref {
+              name = google_secret_manager_secret.database_url_secret.secret_id # Reference the secret
+              key  = "latest"                                                   # Use the latest version of the secret
+            }
+          }
+        }
+
+        # Set the DIRECT_URL environment variable from the direct URL secret
+        env {
+          name = "DIRECT_URL"
+          value_from {
+            secret_key_ref {
+              name = google_secret_manager_secret.direct_url_secret.secret_id # Reference the secret
+              key  = "latest"                                                 # Use the latest version of the secret
+            }
+          }
+        }
       }
     }
   }
