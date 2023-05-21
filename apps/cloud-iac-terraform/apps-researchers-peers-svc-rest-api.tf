@@ -93,7 +93,7 @@ data "google_secret_manager_secret_version" "researchers-peers-svc_access_secret
 }
 
 # This resource block defines a Google Cloud Build trigger that will react to pushes on the branch "feature/DIS-522-move-to-gcp"
-resource "google_cloudbuild_trigger" "default" {
+resource "google_cloudbuild_trigger" "apps_researchers_peers" {
   # Name of the trigger
   name = "push-on-branch-feature-DIS-522-move-to-gcp"
 
@@ -119,7 +119,7 @@ resource "google_cloudbuild_trigger" "default" {
   }
 
   # List of file/directory patterns in the source repository that are included in the source. Here, it includes all files and directories.
-  included_files = ["**"]
+  included_files = ["apps/researchers/peers/**", "libs/researchers/peers/**"]
 
   # Defines the build configuration
   build {
