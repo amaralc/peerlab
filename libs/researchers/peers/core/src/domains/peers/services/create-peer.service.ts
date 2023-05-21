@@ -23,6 +23,7 @@ export class CreatePeerService {
     // Execute
     const peer = await this.peersDatabaseRepository.create(createPeerDto);
     console.log('peer', peer);
+    console.log('test-terraform');
     return peer;
   }
 }
