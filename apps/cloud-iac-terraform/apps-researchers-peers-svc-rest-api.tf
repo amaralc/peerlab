@@ -48,38 +48,45 @@ resource "google_project_iam_binding" "secret_accessor" {
     # The service account to which the role will be granted
     "serviceAccount:${google_service_account.researchers-peers-svc.email}",
   ]
+
+  depends_on = [google_service_account.researchers-peers-svc]
 }
 
 resource "google_project_iam_member" "service_account_user" {
-  project = var.project_id
-  role    = "roles/iam.serviceAccountUser"
-  member  = "serviceAccount:${google_service_account.researchers-peers-svc.email}"
+  project    = var.project_id
+  role       = "roles/iam.serviceAccountUser"
+  member     = "serviceAccount:${google_service_account.researchers-peers-svc.email}"
+  depends_on = [google_service_account.researchers-peers-svc]
 }
 
 # Assign the service account the Cloud Run Admin role
 resource "google_project_iam_member" "run_admin" {
-  project = var.project_id
-  role    = "roles/run.admin"
-  member  = "serviceAccount:${google_service_account.researchers-peers-svc.email}"
+  project    = var.project_id
+  role       = "roles/run.admin"
+  member     = "serviceAccount:${google_service_account.researchers-peers-svc.email}"
+  depends_on = [google_service_account.researchers-peers-svc]
 }
 
 # Assign the service account the Cloud Run Invoker role
 resource "google_project_iam_member" "run_invoker" {
-  project = var.project_id
-  role    = "roles/run.invoker"
-  member  = "serviceAccount:${google_service_account.researchers-peers-svc.email}"
+  project    = var.project_id
+  role       = "roles/run.invoker"
+  member     = "serviceAccount:${google_service_account.researchers-peers-svc.email}"
+  depends_on = [google_service_account.researchers-peers-svc]
 }
 
 # Assign the service account the Cloud Build Editor role
 resource "google_project_iam_member" "cloudbuild_editor" {
-  project = var.project_id
-  role    = "roles/cloudbuild.builds.editor"
-  member  = "serviceAccount:${google_service_account.researchers-peers-svc.email}"
+  project    = var.project_id
+  role       = "roles/cloudbuild.builds.editor"
+  member     = "serviceAccount:${google_service_account.researchers-peers-svc.email}"
+  depends_on = [google_service_account.researchers-peers-svc]
 }
 
 # Create the Service Account Key
 resource "google_service_account_key" "researchers-peers-svc-key" {
   service_account_id = google_service_account.researchers-peers-svc.name
+  depends_on         = [google_service_account.researchers-peers-svc]
 }
 
 # Create the secret in Secret Manager
