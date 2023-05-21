@@ -5,7 +5,7 @@
 # - https://medium.com/@guysenpai89/nx-monorepo-publish-your-libraries-to-github-packages-with-github-actions-semantic-release-5f2c3fdffaa0
 # - https://medium.com/@guysenpai89/nx-monorepo-publish-your-libraries-to-github-packages-with-github-actions-semantic-release-fa9822467b24
 
-name: IaC
+name: Terraform Apply Staging
 
 # Trigger the workflow when pushing to the bugfix branch
 on:
@@ -18,7 +18,7 @@ env:
   HUSKY: 0
 
 jobs:
-  trunk:
+  terraform-apply-staging:
     # Run the job on Ubuntu latest version
     runs-on: ubuntu-latest
 
