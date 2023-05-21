@@ -123,7 +123,9 @@ resource "google_cloudbuild_trigger" "apps_researchers_peers" {
 
   # Defines the build configuration
   build {
+
     options {
+      # The type of machine to be used while building the Docker image
       machine_type = "E2_HIGHCPU_32"
     }
 
