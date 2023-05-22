@@ -152,10 +152,10 @@ resource "google_secret_manager_secret_version" "direct_url_secret_v1" {
   secret_data = var.direct_url                                    # Set the value of the secret from the direct_url variable
 }
 
-# This resource block defines a Google Cloud Build trigger that will react to pushes on the branch "feature/DIS-522-move-to-gcp"
+# This resource block defines a Google Cloud Build trigger that will react to pushes on the branch "staging"
 resource "google_cloudbuild_trigger" "apps_researchers_peers" {
   # Name of the trigger
-  name = "push-on-branch-feature-DIS-522-move-to-gcp"
+  name = "push-on-branch-staging"
 
   # Project ID where the trigger will be created
   project = var.project_id
@@ -174,7 +174,7 @@ resource "google_cloudbuild_trigger" "apps_researchers_peers" {
     # Configuration for triggering on a push to a specific branch
     push {
       # Regex pattern for the branch name to trigger on
-      branch = "^feature/DIS-522-move-to-gcp$"
+      branch = "^staging$"
     }
   }
 

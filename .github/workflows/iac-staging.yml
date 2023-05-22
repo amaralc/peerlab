@@ -11,7 +11,7 @@ name: Terraform Apply Staging
 on:
   push:
     branches:
-      - feature/DIS-522-move-to-gcp
+      - staging
 
 # Set environment variable to disable Husky
 env:
