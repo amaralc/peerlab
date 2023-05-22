@@ -94,6 +94,9 @@ COPY --from=build /app/dist /app/dist
 COPY --from=build /app/entrypoints /app/entrypoints
 COPY --from=build /app/libs/researchers/peers/adapters/src/database/infra/prisma /app/libs/researchers/peers/adapters/src/database/infra/prisma
 
+# Make the bash script executable
+RUN chmod +x /app/entrypoints/run-researchers-peers-svc-rest-api.sh
+
 # # Expose the service api port
 EXPOSE 8080
 
