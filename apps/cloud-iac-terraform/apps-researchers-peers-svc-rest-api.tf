@@ -207,23 +207,23 @@ resource "google_cloudbuild_trigger" "apps_researchers_peers" {
       ]
     }
 
-    # This step deploys the service to Cloud Run after the image is built
-    step {
-      name = "gcr.io/cloud-builders/gcloud" # Specifies the Docker image that will be used to run this step.
+    # # This step deploys the service to Cloud Run after the image is built
+    # step {
+    #   name = "gcr.io/cloud-builders/gcloud" # Specifies the Docker image that will be used to run this step.
 
-      args = [
-        "run",                                               # Specifies that the gcloud command will interact with Cloud Run.
-        "deploy",                                            # Specifies that the operation to be performed is 'deploy'.
-        local.app_name,                                      # Passes the name of your application as the service name to be deployed.
-        "--image",                                           # Flag that specifies the Docker image to be deployed.
-        "gcr.io/${var.project_id}/${local.app_name}:latest", # Specifies the Docker image to be deployed. This should be the image built in the previous steps.
-        "--region",                                          # Flag that specifies the region in which the service will be deployed.
-        var.region,                                          # Specifies the region to deploy the service to.
-        "--platform",                                        # Flag that specifies the target platform for deployment.
-        "managed",                                           # Specifies that the service will be deployed on the fully managed version of Cloud Run.
-        "--allow-unauthenticated"                            # Flag that specifies that the service can be invoked without providing credentials, meaning it's publicly accessible.
-      ]
-    }
+    #   args = [
+    #     "run",                                               # Specifies that the gcloud command will interact with Cloud Run.
+    #     "deploy",                                            # Specifies that the operation to be performed is 'deploy'.
+    #     local.app_name,                                      # Passes the name of your application as the service name to be deployed.
+    #     "--image",                                           # Flag that specifies the Docker image to be deployed.
+    #     "gcr.io/${var.project_id}/${local.app_name}:latest", # Specifies the Docker image to be deployed. This should be the image built in the previous steps.
+    #     "--region",                                          # Flag that specifies the region in which the service will be deployed.
+    #     var.region,                                          # Specifies the region to deploy the service to.
+    #     "--platform",                                        # Flag that specifies the target platform for deployment.
+    #     "managed",                                           # Specifies that the service will be deployed on the fully managed version of Cloud Run.
+    #     "--allow-unauthenticated"                            # Flag that specifies that the service can be invoked without providing credentials, meaning it's publicly accessible.
+    #   ]
+    # }
 
     # List of Docker images to be pushed to the registry upon successful completion of all build steps
     images = [
