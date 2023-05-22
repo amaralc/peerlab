@@ -5,17 +5,13 @@
 # - https://medium.com/@guysenpai89/nx-monorepo-publish-your-libraries-to-github-packages-with-github-actions-semantic-release-5f2c3fdffaa0
 # - https://medium.com/@guysenpai89/nx-monorepo-publish-your-libraries-to-github-packages-with-github-actions-semantic-release-fa9822467b24
 
-name: Researchers Peers Service
+name: Terraform Apply Staging
 
 # Trigger the workflow when pushing to the bugfix branch
 on:
   push:
     branches:
       - feature/DIS-522-move-to-gcp
-    paths:
-      - "apps/researchers/peers/**"
-      - "libs/researchers/peers/**"
-      - "package.json"
 
 # Set environment variable to disable Husky
 env:
