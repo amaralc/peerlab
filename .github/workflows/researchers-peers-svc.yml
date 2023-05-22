@@ -197,8 +197,8 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/researchers-peers-svc-rest-api:${{ github.sha }} -f apps/researchers/peers/svc/Dockerfile .
-          echo "IMAGE_NAME=gcr.io/${{ secrets.GCP_PROJECT_ID }}/researchers-peers-svc-rest-api:${{ github.sha }}" >> $GITHUB_ENV
+          docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/my-app:${{ github.sha }} .
+          echo "IMAGE_NAME=gcr.io/${{ secrets.GCP_PROJECT_ID }}/my-app:${{ github.sha }}" >> $GITHUB_ENV
 
       - name: Push Docker image
         run: |
