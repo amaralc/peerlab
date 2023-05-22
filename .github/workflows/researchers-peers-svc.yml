@@ -12,11 +12,11 @@ on:
   push:
     branches:
       - feature/DIS-522-move-to-gcp
-    paths:
-      - "apps/cloud-iac-terraform/apps-researchers-peers-svc-rest-api.tf"
-      - "apps/researchers/peers/**"
-      - "libs/researchers/peers/**"
-      - "package.json"
+    # paths:
+    #   - "apps/cloud-iac-terraform/apps-researchers-peers-svc-rest-api.tf"
+    #   - "apps/researchers/peers/**"
+    #   - "libs/researchers/peers/**"
+    #   - "package.json"
 
 # Set environment variable to disable Husky
 env:
