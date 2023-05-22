@@ -207,100 +207,114 @@ resource "google_cloudbuild_trigger" "apps_researchers_peers" {
       ]
     }
 
-    # # This step deploys the service to Cloud Run after the image is built
-    # step {
-    #   name = "gcr.io/cloud-builders/gcloud" # Specifies the Docker image that will be used to run this step.
+    # This step pushes the Docker image to GCR
+    step {
+      # Name of the builder (the Docker image on Google Cloud) that will execute this build step
+      name = "gcr.io/cloud-builders/docker"
 
-    #   args = [
-    #     "run",                                               # Specifies that the gcloud command will interact with Cloud Run.
-    #     "deploy",                                            # Specifies that the operation to be performed is 'deploy'.
-    #     local.app_name,                                      # Passes the name of your application as the service name to be deployed.
-    #     "--image",                                           # Flag that specifies the Docker image to be deployed.
-    #     "gcr.io/${var.project_id}/${local.app_name}:latest", # Specifies the Docker image to be deployed. This should be the image built in the previous steps.
-    #     "--region",                                          # Flag that specifies the region in which the service will be deployed.
-    #     var.region,                                          # Specifies the region to deploy the service to.
-    #     "--platform",                                        # Flag that specifies the target platform for deployment.
-    #     "managed",                                           # Specifies that the service will be deployed on the fully managed version of Cloud Run.
-    #     "--allow-unauthenticated"                            # Flag that specifies that the service can be invoked without providing credentials, meaning it's publicly accessible.
-    #   ]
-    # }
+      args = [
+        "push",
+        "gcr.io/${var.project_id}/${local.app_name}:latest",            # Push the image with the latest tag
+        "gcr.io/${var.project_id}/${local.app_name}:${local.image_tag}" # Push the image with the commit SHA tag
+      ]
+      entrypoint = "bash"
+      id         = "push-to-gcr"
+    }
 
-    # List of Docker images to be pushed to the registry upon successful completion of all build steps
-    images = [
-      "gcr.io/${var.project_id}/${local.app_name}:latest",            # Image with the latest tag
-      "gcr.io/${var.project_id}/${local.app_name}:${local.image_tag}" # Image with the commit SHA tag
-    ]
+    # This step deploys the service to Cloud Run after the image is built
+    step {
+      name = "gcr.io/cloud-builders/gcloud" # Specifies the Docker image that will be used to run this step.
+
+      args = [
+        "run",                                                           # Specifies that the gcloud command will interact with Cloud Run.
+        "deploy",                                                        # Specifies that the operation to be performed is 'deploy'.
+        local.app_name,                                                  # Passes the name of your application as the service name to be deployed.
+        "--image",                                                       # Flag that specifies the Docker image to be deployed.
+        "gcr.io/${var.project_id}/${local.app_name}:${local.image_tag}", # Specifies the Docker image to be deployed. This should be the image built in the previous steps.
+        "--region",                                                      # Flag that specifies the region in which the service will be deployed.
+        var.region,                                                      # Specifies the region to deploy the service to.
+        "--platform",                                                    # Flag that specifies the target platform for deployment.
+        "managed",                                                       # Specifies that the service will be deployed on the fully managed version of Cloud Run.
+        "--allow-unauthenticated"                                        # Flag that specifies that the service can be invoked without providing credentials, meaning it's publicly accessible.
+      ]
+    }
+
+    # # List of Docker images to be pushed to the registry upon successful completion of all build steps
+    # images = [
+    #   "gcr.io/${var.project_id}/${local.app_name}:latest",            # Image with the latest tag
+    #   "gcr.io/${var.project_id}/${local.app_name}:${local.image_tag}" # Image with the commit SHA tag
+    # ]
   }
 }
 
 
-# # This resource block defines a Google Cloud Run service. This service will host the Docker image created by the Google Cloud Build trigger.
-# resource "google_cloud_run_service" "apps_researchers_peers" {
-#   # Name of the service
-#   name = local.app_name
+# This resource block defines a Google Cloud Run service. This service will host the Docker image created by the Google Cloud Build trigger.
+resource "google_cloud_run_service" "apps_researchers_peers" {
+  # Name of the service
+  name = local.app_name
 
-#   # The region where the service will be located
-#   location = var.region
+  # The region where the service will be located
+  location = var.region
 
-#   # Defining the service template
-#   template {
-#     spec {
-#       # The service account to be used by the service
-#       service_account_name = google_service_account.researchers-peers-svc.email
+  # Defining the service template
+  template {
+    spec {
+      # The service account to be used by the service
+      service_account_name = google_service_account.researchers-peers-svc.email
 
-#       # The Docker image to use for the service
-#       containers {
-#         # The docker image is pulled from GCR using the project ID, app name and the image tag which corresponds to the commit hash
-#         image = "gcr.io/${google_cloudbuild_trigger.apps_researchers_peers.project}/${local.app_name}:latest"
+      # The Docker image to use for the service
+      containers {
+        # The docker image is pulled from GCR using the project ID, app name and the image tag which corresponds to the commit hash
+        image = "gcr.io/${google_cloudbuild_trigger.apps_researchers_peers.project}/${local.app_name}:latest"
 
-#         # Set the ENTRYPOINT_PATH environment variable (check the Dockerfile for more details)
-#         env {
-#           name  = "ENTRYPOINT_PATH"
-#           value = "entrypoints/researchers-peers-svc-rest-api.sh"
-#         }
+        # Set the ENTRYPOINT_PATH environment variable (check the Dockerfile for more details)
+        env {
+          name  = "ENTRYPOINT_PATH"
+          value = "entrypoints/researchers-peers-svc-rest-api.sh"
+        }
 
-#         # Set the DATABASE_URL environment variable from the database URL secret
-#         env {
-#           name = "DATABASE_URL"
-#           value_from {
-#             secret_key_ref {
-#               name = google_secret_manager_secret.database_url_secret.secret_id # Reference the secret
-#               key  = "latest"                                                   # Use the latest version of the secret
-#             }
-#           }
-#         }
+        # Set the DATABASE_URL environment variable from the database URL secret
+        env {
+          name = "DATABASE_URL"
+          value_from {
+            secret_key_ref {
+              name = google_secret_manager_secret.database_url_secret.secret_id # Reference the secret
+              key  = "latest"                                                   # Use the latest version of the secret
+            }
+          }
+        }
 
-#         # Set the DIRECT_URL environment variable from the direct URL secret
-#         env {
-#           name = "DIRECT_URL"
-#           value_from {
-#             secret_key_ref {
-#               name = google_secret_manager_secret.direct_url_secret.secret_id # Reference the secret
-#               key  = "latest"                                                 # Use the latest version of the secret
-#             }
-#           }
-#         }
-#       }
-#     }
-#   }
+        # Set the DIRECT_URL environment variable from the direct URL secret
+        env {
+          name = "DIRECT_URL"
+          value_from {
+            secret_key_ref {
+              name = google_secret_manager_secret.direct_url_secret.secret_id # Reference the secret
+              key  = "latest"                                                 # Use the latest version of the secret
+            }
+          }
+        }
+      }
+    }
+  }
 
-#   # Defines the service traffic parameters
-#   traffic {
-#     # The percent of traffic this version of the service should receive
-#     percent = 100
+  # Defines the service traffic parameters
+  traffic {
+    # The percent of traffic this version of the service should receive
+    percent = 100
 
-#     # Whether traffic should be directed to the latest revision
-#     latest_revision = true
-#   }
+    # Whether traffic should be directed to the latest revision
+    latest_revision = true
+  }
 
-#   # The service will be created after the Cloud Build trigger has completed
-#   depends_on = [google_cloudbuild_trigger.apps_researchers_peers]
-# }
+  # The service will be created after the Cloud Build trigger has completed
+  depends_on = [google_cloudbuild_trigger.apps_researchers_peers]
+}
 
-# # This block defines a Cloud Run IAM member. This sets the permissions for who can access the Cloud Run service.
-# resource "google_cloud_run_service_iam_member" "public" {
-#   service  = google_cloud_run_service.apps_researchers_peers.name     # The name of the service to which the IAM policy will be applied
-#   location = google_cloud_run_service.apps_researchers_peers.location # The location of the service to which the IAM policy will be applied
-#   role     = "roles/run.invoker"                                      # The role to be granted
-#   member   = "allUsers"                                               # The user, group, or service account who will have the role granted. In this case, all users.
-# }
+# This block defines a Cloud Run IAM member. This sets the permissions for who can access the Cloud Run service.
+resource "google_cloud_run_service_iam_member" "public" {
+  service  = google_cloud_run_service.apps_researchers_peers.name     # The name of the service to which the IAM policy will be applied
+  location = google_cloud_run_service.apps_researchers_peers.location # The location of the service to which the IAM policy will be applied
+  role     = "roles/run.invoker"                                      # The role to be granted
+  member   = "allUsers"                                               # The user, group, or service account who will have the role granted. In this case, all users.
+}
