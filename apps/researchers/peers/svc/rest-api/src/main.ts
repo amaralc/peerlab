@@ -52,6 +52,7 @@ const bootstrap = async () => {
   await app.listen(port);
   Logger.log(`🚀 Service API is running on: http://localhost:${port}`, 'bootstrap');
   Logger.log(`🚀 Swagger API is running on: http://localhost:${port}/docs`, 'bootstrap');
+  Logger.log(`22:35`);
 };
 
 bootstrap();
