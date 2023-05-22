@@ -179,7 +179,7 @@ resource "google_cloudbuild_trigger" "apps_researchers_peers" {
   }
 
   # Included files for the trigger
-  included_files = ["apps/researchers/peers/**", "libs/researchers/peers/**"]
+  included_files = ["apps/researchers/peers/**", "libs/researchers/peers/**", "package.json", "yarn.lock"]
 
   # Defines the build configuration
   build {
