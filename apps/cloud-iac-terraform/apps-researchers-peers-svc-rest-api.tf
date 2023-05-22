@@ -207,19 +207,19 @@ resource "google_cloudbuild_trigger" "apps_researchers_peers" {
       ]
     }
 
-    # This step pushes the Docker image to GCR
-    step {
-      # Name of the builder (the Docker image on Google Cloud) that will execute this build step
-      name = "gcr.io/cloud-builders/docker"
+    # # This step pushes the Docker image to GCR
+    # step {
+    #   # Name of the builder (the Docker image on Google Cloud) that will execute this build step
+    #   name = "gcr.io/cloud-builders/docker"
 
-      args = [
-        "push",
-        "gcr.io/${var.project_id}/${local.app_name}:latest",            # Push the image with the latest tag
-        "gcr.io/${var.project_id}/${local.app_name}:${local.image_tag}" # Push the image with the commit SHA tag
-      ]
-      entrypoint = "bash"
-      id         = "push-to-gcr"
-    }
+    #   args = [
+    #     "push",
+    #     "gcr.io/${var.project_id}/${local.app_name}:latest",            # Push the image with the latest tag
+    #     "gcr.io/${var.project_id}/${local.app_name}:${local.image_tag}" # Push the image with the commit SHA tag
+    #   ]
+    #   entrypoint = "bash"
+    #   id         = "push-to-gcr"
+    # }
 
     # # This step deploys the service to Cloud Run after the image is built
     # step {
