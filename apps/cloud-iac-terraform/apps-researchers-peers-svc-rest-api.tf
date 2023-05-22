@@ -270,7 +270,7 @@ resource "google_cloud_run_service" "apps_researchers_peers" {
         # Set the ENTRYPOINT_PATH environment variable (check the Dockerfile for more details)
         env {
           name  = "ENTRYPOINT_PATH"
-          value = "entrypoints/researchers-peers-svc-rest-api.sh"
+          value = "entrypoints/run-researchers-peers-svc-rest-api.sh"
         }
 
         # Set the DATABASE_URL environment variable from the database URL secret
