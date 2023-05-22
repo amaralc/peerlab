@@ -152,86 +152,86 @@ resource "google_secret_manager_secret_version" "direct_url_secret_v1" {
   secret_data = var.direct_url                                    # Set the value of the secret from the direct_url variable
 }
 
-# This resource block defines a Google Cloud Build trigger that will react to pushes on the branch "feature/DIS-522-move-to-gcp"
-resource "google_cloudbuild_trigger" "apps_researchers_peers" {
-  # Name of the trigger
-  name = "push-on-branch-feature-DIS-522-move-to-gcp"
+# # This resource block defines a Google Cloud Build trigger that will react to pushes on the branch "feature/DIS-522-move-to-gcp"
+# resource "google_cloudbuild_trigger" "apps_researchers_peers" {
+#   # Name of the trigger
+#   name = "push-on-branch-feature-DIS-522-move-to-gcp"
 
-  # Project ID where the trigger will be created
-  project = var.project_id
+#   # Project ID where the trigger will be created
+#   project = var.project_id
 
-  # Disable status of the trigger
-  disabled = false
+#   # Disable status of the trigger
+#   disabled = false
 
-  # GitHub configuration
-  github {
-    # GitHub owner's username
-    owner = var.repo_owner
+#   # GitHub configuration
+#   github {
+#     # GitHub owner's username
+#     owner = var.repo_owner
 
-    # Name of the source repository
-    name = var.repo_name
+#     # Name of the source repository
+#     name = var.repo_name
 
-    # Configuration for triggering on a push to a specific branch
-    push {
-      # Regex pattern for the branch name to trigger on
-      branch = "^feature/DIS-522-move-to-gcp$"
-    }
-  }
+#     # Configuration for triggering on a push to a specific branch
+#     push {
+#       # Regex pattern for the branch name to trigger on
+#       branch = "^feature/DIS-522-move-to-gcp$"
+#     }
+#   }
 
-  # Included files for the trigger
-  included_files = ["apps/researchers/peers/**", "libs/researchers/peers/**"]
+#   # Included files for the trigger
+#   included_files = ["apps/researchers/peers/**", "libs/researchers/peers/**"]
 
-  # Defines the build configuration
-  build {
+#   # Defines the build configuration
+#   build {
 
-    options {
-      # The type of machine to be used while building the Docker image
-      machine_type = "E2_HIGHCPU_32"
-    }
+#     options {
+#       # The type of machine to be used while building the Docker image
+#       machine_type = "E2_HIGHCPU_32"
+#     }
 
-    # Each step in the build is represented as a list of commands
-    step {
-      # Name of the builder (the Docker image on Google Cloud) that will execute this build step
-      name = "gcr.io/cloud-builders/docker"
+#     # Each step in the build is represented as a list of commands
+#     step {
+#       # Name of the builder (the Docker image on Google Cloud) that will execute this build step
+#       name = "gcr.io/cloud-builders/docker"
 
-      # Arguments to pass to the build step
-      args = [
-        "build",                                                         # Docker command to build an image from a Dockerfile
-        "-t",                                                            # Tag the image with a name and optionally a tag in the 'name:tag' format
-        "gcr.io/${var.project_id}/${local.app_name}:latest",             # Tag the image with the latest tag
-        "-t",                                                            # Tag the image with a name and optionally a tag in the 'name:tag' format
-        "gcr.io/${var.project_id}/${local.app_name}:${local.image_tag}", # Tag the image with the commit SHA
-        "-f",                                                            # Name of the Dockerfile (Default is 'PATH/Dockerfile')
-        "${local.service_folder_path}/Dockerfile",                       # Path to the Dockerfile
-        ".",                                                             # The build context is the current directory
-      ]
-    }
+#       # Arguments to pass to the build step
+#       args = [
+#         "build",                                                         # Docker command to build an image from a Dockerfile
+#         "-t",                                                            # Tag the image with a name and optionally a tag in the 'name:tag' format
+#         "gcr.io/${var.project_id}/${local.app_name}:latest",             # Tag the image with the latest tag
+#         "-t",                                                            # Tag the image with a name and optionally a tag in the 'name:tag' format
+#         "gcr.io/${var.project_id}/${local.app_name}:${local.image_tag}", # Tag the image with the commit SHA
+#         "-f",                                                            # Name of the Dockerfile (Default is 'PATH/Dockerfile')
+#         "${local.service_folder_path}/Dockerfile",                       # Path to the Dockerfile
+#         ".",                                                             # The build context is the current directory
+#       ]
+#     }
 
-    # This step deploys the service to Cloud Run after the image is built
-    step {
-      name = "gcr.io/cloud-builders/gcloud" # Specifies the Docker image that will be used to run this step.
+#     # This step deploys the service to Cloud Run after the image is built
+#     step {
+#       name = "gcr.io/cloud-builders/gcloud" # Specifies the Docker image that will be used to run this step.
 
-      args = [
-        "run",                                                           # Specifies that the gcloud command will interact with Cloud Run.
-        "deploy",                                                        # Specifies that the operation to be performed is 'deploy'.
-        local.app_name,                                                  # Passes the name of your application as the service name to be deployed.
-        "--image",                                                       # Flag that specifies the Docker image to be deployed.
-        "gcr.io/${var.project_id}/${local.app_name}:${local.image_tag}", # Specifies the Docker image to be deployed. This should be the image built in the previous steps.
-        "--region",                                                      # Flag that specifies the region in which the service will be deployed.
-        var.region,                                                      # Specifies the region to deploy the service to.
-        "--platform",                                                    # Flag that specifies the target platform for deployment.
-        "managed",                                                       # Specifies that the service will be deployed on the fully managed version of Cloud Run.
-        "--allow-unauthenticated"                                        # Flag that specifies that the service can be invoked without providing credentials, meaning it's publicly accessible.
-      ]
-    }
+#       args = [
+#         "run",                                                           # Specifies that the gcloud command will interact with Cloud Run.
+#         "deploy",                                                        # Specifies that the operation to be performed is 'deploy'.
+#         local.app_name,                                                  # Passes the name of your application as the service name to be deployed.
+#         "--image",                                                       # Flag that specifies the Docker image to be deployed.
+#         "gcr.io/${var.project_id}/${local.app_name}:${local.image_tag}", # Specifies the Docker image to be deployed. This should be the image built in the previous steps.
+#         "--region",                                                      # Flag that specifies the region in which the service will be deployed.
+#         var.region,                                                      # Specifies the region to deploy the service to.
+#         "--platform",                                                    # Flag that specifies the target platform for deployment.
+#         "managed",                                                       # Specifies that the service will be deployed on the fully managed version of Cloud Run.
+#         "--allow-unauthenticated"                                        # Flag that specifies that the service can be invoked without providing credentials, meaning it's publicly accessible.
+#       ]
+#     }
 
-    # List of Docker images to be pushed to the registry upon successful completion of all build steps
-    images = [
-      "gcr.io/${var.project_id}/${local.app_name}:latest",            # Image with the latest tag
-      "gcr.io/${var.project_id}/${local.app_name}:${local.image_tag}" # Image with the commit SHA tag
-    ]
-  }
-}
+#     # List of Docker images to be pushed to the registry upon successful completion of all build steps
+#     images = [
+#       "gcr.io/${var.project_id}/${local.app_name}:latest",            # Image with the latest tag
+#       "gcr.io/${var.project_id}/${local.app_name}:${local.image_tag}" # Image with the commit SHA tag
+#     ]
+#   }
+# }
 
 
 # This resource block defines a Google Cloud Run service. This service will host the Docker image created by the Google Cloud Build trigger.
