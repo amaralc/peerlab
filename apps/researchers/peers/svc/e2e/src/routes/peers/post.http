@@ -1,4 +1,4 @@
-POST https://micro-applications-template-rest-api.fly.dev/peers HTTP/1.1
+POST https://researchers-peers-svc-rest-api-nhpvrzlgpq-ey.a.run.app/peers HTTP/1.1
 content-type: application/json
 Authorization: my-secret-api-key
 
