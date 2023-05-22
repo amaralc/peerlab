@@ -51,6 +51,7 @@ const bootstrap = async () => {
   const port = configDto.applicationPort;
   await app.listen(port);
   Logger.log(`🚀 Service API is running on: http://localhost:${port}`, 'bootstrap');
+  Logger.log(`🚀 Swagger API is running on: http://localhost:${port}/docs`, 'bootstrap');
 };
 
 bootstrap();
