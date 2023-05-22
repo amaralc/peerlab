@@ -83,6 +83,9 @@ ENV EVENTS_TRANSPORTER=nestjs-default-kafka-transporter
 ## Auth
 ENV API_KEY=my-secret-api-key
 
+# Here we define our new ENTRYPOINT_PATH environment variable and its default value.
+ENV ENTRYPOINT_PATH="entrypoints/run-researchers-peers-svc-rest-api.sh"
+
 WORKDIR /app/
 COPY package.json yarn.lock ./
 
@@ -94,5 +97,5 @@ COPY --from=build /app/libs/researchers/peers/adapters/src/database/infra/prisma
 # # Expose the service api port
 EXPOSE 8080
 
-# Start the service
-CMD ["bash", "entrypoints/run-rest-api.sh"]
+# Start the service using the ENTRYPOINT_PATH environment variable
+ENTRYPOINT ["/bin/bash", "-c", "${ENTRYPOINT_PATH}"]

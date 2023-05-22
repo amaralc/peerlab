@@ -22,10 +22,10 @@ researchers-peers-svc-docker-build-no-cache:
 	sudo docker build -t researchers-peers-svc:latest -f apps/researchers/peers/svc/Dockerfile --no-cache .
 
 researchers-peers-svc-rest-api-docker-run:
-	docker run -it --rm -p 8080:8080 researchers-peers-svc:latest bash entrypoints/run-rest-api.sh
+	docker run -it --rm -p 8080:8080 researchers-peers-svc:latest bash apps/researchers/peers/svc/rest-api/run-build.sh
 
 researchers-peers-svc-consumer-docker-run:
-	docker run -it --rm -p 8080:8080 researchers-peers-svc:latest bash entrypoints/run-consumer.sh
+	docker run -it --rm -p 8080:8080 researchers-peers-svc:latest bash apps/researchers/peers/svc/consumer/run-build.sh
 
 # Application
 researchers-peers-svc-prisma-postgresql-setup:
