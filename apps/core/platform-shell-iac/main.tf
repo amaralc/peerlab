@@ -1,11 +1,11 @@
 resource "neon_project" "postgresql-dbms" {
-  name                     = var.project_id            # Use the same project ID as in the Google Cloud provider
+  name                     = var.gcp_project_id        # Use the same project ID as in the Google Cloud provider
   region_id                = var.neon_project_location #"aws-eu-central-1"
   autoscaling_limit_max_cu = 1
 }
 
 resource "neon_branch" "postgresql-dbms-environment" {
-  project_id = var.neon_project_id
+  project_id = neon_project.postgresql-dbms.id
   name       = "production"
 }
 
