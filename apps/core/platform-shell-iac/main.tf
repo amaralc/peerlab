@@ -1,14 +1,25 @@
-module "production" {
-  environment_name                    = "production"                            # The deployment environment (branch-name, commit-hash, etc.)
-  source                              = "./production-environment"              # The path to the module
-  commit_hash                         = var.commit_hash                         # Force new cloud run revision to be created
-  vercel_api_token                    = var.vercel_api_token                    # Vercel API token
-  neon_api_key                        = var.neon_api_key                        # Neon API key
-  neon_project_location               = var.neon_project_location               # The Neon project region
-  project_id                          = var.gcp_project_id                      # The Google Cloud project ID
-  region                              = var.gcp_project_location                # The region where resources will be created
-  gcp_docker_artifact_repository_name = var.gcp_docker_artifact_repository_name # The name of the Docker repository
+resource "neon_project" "postgresql-dbms" {
+  name                     = var.project_id            # Use the same project ID as in the Google Cloud provider
+  region_id                = var.neon_project_location #"aws-eu-central-1"
+  autoscaling_limit_max_cu = 1
 }
+
+resource "neon_branch" "postgresql-dbms-environment" {
+  project_id = var.neon_project_id
+  name       = "production"
+}
+
+# module "production" {
+#   environment_name                    = "production"                            # The deployment environment (branch-name, commit-hash, etc.)
+#   source                              = "./production-environment"              # The path to the module
+#   commit_hash                         = var.commit_hash                         # Force new cloud run revision to be created
+#   vercel_api_token                    = var.vercel_api_token                    # Vercel API token
+#   neon_api_key                        = var.neon_api_key                        # Neon API key
+#   neon_project_location               = var.neon_project_location               # The Neon project region
+#   project_id                          = var.gcp_project_id                      # The Google Cloud project ID
+#   region                              = var.gcp_project_location                # The region where resources will be created
+#   gcp_docker_artifact_repository_name = var.gcp_docker_artifact_repository_name # The name of the Docker repository
+# }
 
 # module "staging" {
 #   environment_name                    = "staging"                               # The deployment environment (branch-name, commit-hash, etc.)
