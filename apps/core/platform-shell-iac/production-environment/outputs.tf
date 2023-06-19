@@ -2,3 +2,7 @@
 #   description = "Neon project ID"
 #   value       = module.postgresql-dbms.neon_project_id
 # }
+
+output "connection_string" {
+  value = module.researchers-peers-svc.connection_string
+}
