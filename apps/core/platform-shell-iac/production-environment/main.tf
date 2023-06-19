@@ -1,31 +1,29 @@
 # PostgreSQL Database Management System
-module "postgresql-dbms" {
-  source                = "../postgresql-dbms"
-  neon_project_location = var.neon_project_location
-  project_id            = var.project_id
-  neon_api_key          = var.neon_api_key
+module "database-management-system" {
+  source            = "../database-management-system"
+  project_id        = var.project_id
+  cockroach_api_key = var.cockroach_api_key
 }
 
-# PostgreSQL Database Branch Environment
-module "postgresql-dbms-environment" {
-  source           = "../postgresql-dbms-environment"
-  environment_name = var.environment_name
-  neon_project_id  = module.postgresql-dbms.neon_project_id
-  neon_api_key     = var.neon_api_key
-}
+# # PostgreSQL Database Branch Environment
+# module "postgresql-dbms-environment" {
+#   source           = "../postgresql-dbms-environment"
+#   environment_name = var.environment_name
+#   neon_project_id  = module.postgresql-dbms.neon_project_id
+#   neon_api_key     = var.neon_api_key
+# }
 
 # Researchers Peers Service
 module "researchers-peers-svc" {
   source                              = "../../../researchers/peers/svc-iac"
   commit_hash                         = var.commit_hash
   environment_name                    = var.environment_name
+  project_id                          = var.project_id
   region                              = var.region
   gcp_docker_artifact_repository_name = var.gcp_docker_artifact_repository_name
-  neon_branch_host                    = module.postgresql-dbms-environment.branch_host
-  neon_branch_id                      = module.postgresql-dbms-environment.branch_id
-  project_id                          = var.project_id
-  neon_api_key                        = var.neon_api_key
+  cockroach_api_key                   = var.cockroach_api_key
   credentials_path                    = var.credentials_path
+  database_management_system_id       = module.database-management-system.id
 }
 
 # # Application Shell

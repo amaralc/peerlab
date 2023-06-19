@@ -15,10 +15,10 @@ terraform {
       version = "0.13.2"
     }
 
-    neon = {
-      source  = "kislerdm/neon"
-      version = "0.1.0"
-    }
+    # neon = {
+    #   source  = "kislerdm/neon"
+    #   version = "0.1.0"
+    # }
   }
 }
 
@@ -41,8 +41,8 @@ provider "vercel" {
   api_token = var.vercel_api_token
 }
 
-# Neon DB provider
-provider "neon" {
-  api_key = var.neon_api_key
-}
+# # Neon DB provider
+# provider "neon" {
+#   api_key = var.neon_api_key
+# }
 

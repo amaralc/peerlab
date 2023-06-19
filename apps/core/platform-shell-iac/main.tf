@@ -3,8 +3,7 @@ module "production" {
   source                              = "./production-environment"              # The path to the module
   commit_hash                         = var.commit_hash                         # Force new cloud run revision to be created
   vercel_api_token                    = var.vercel_api_token                    # Vercel API token
-  neon_api_key                        = var.neon_api_key                        # Neon API key
-  neon_project_location               = var.neon_project_location               # The Neon project region
+  cockroach_api_key                   = var.cockroach_api_key                   # Cockroach API Key
   project_id                          = var.gcp_project_id                      # The Google Cloud project ID
   region                              = var.gcp_project_location                # The region where resources will be created
   gcp_docker_artifact_repository_name = var.gcp_docker_artifact_repository_name # The name of the Docker repository
