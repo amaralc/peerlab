@@ -25,6 +25,37 @@ How to attend to the following developer story in a well structured and automate
   - https://www.linkedin.com/in/dkisler/
 - In the terraform provider, a branch is considered a resource;
 
+During Neon deployment we found instabilities between Github Actions, the Neon Terraform Provider and Neon APIs. During the deployment, it was
+not possible to create a branch and Neon was complaining that the branch already existed. This was happening because the branch was being created
+but no compute endpoint was being created.
+
+We did not go further in the investigation. We decided to move to Cloud SQL due to the more mature support of Terraform.
+
+## Google Cloud SQL
+
+- Connecting Cloud Run to Cloud SQL using Terraform is not a simples as using Neon.
+- We are now having trouble to connect the Cloud SQL instance with the Cloud Run instance.
+- After the cloud sql resource is created in terraform, there is no simple connection string that can be used to connect to the database.
+
+- We tried to connect using cloud sql proxy: https://cloud.google.com/sql/docs/postgres/connect-run#node.js
+
+:::info
+
+Note: The PostgreSQL standard requires a .s.PGSQL.5432 suffix in the socket path. Some libraries apply this suffix automatically, but others require you to specify the socket path as follows:
+
+`/cloudsql/INSTANCE_CONNECTION_NAME/.s.PGSQL.5432`
+
+:::
+
+- https://www.youtube.com/watch?v=E4dbrWl-liA
+- https://github.com/GoogleCloudPlatform/nodejs-docs-samples/tree/main/cloud-sql/postgres/knex
+
+## Cockroach DB
+
+- After suffering with connectivity issues with Google Cloud SQL, we decided to try Cockroach DB.
+- Apparently Cockroach DB has a good Terraform support and it is easy to connect to it from Cloud Run.
+- Also Cockroach DB has a free tier that can be used for testing purposes, and it is PostgreSQL compatible.
+
 ## Remote Terraform Backend with Google Cloud Platform
 
 - One back-end per environment (isolated);
