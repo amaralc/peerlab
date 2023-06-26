@@ -39,6 +39,19 @@ module "staging" {
   depends_on                          = [module.gcp_apis, module.production]
 }
 
+# Staging Environment
+module "feature-peer-541-test-pull-request-preview-workflow" {
+  source                              = "../../../libs/iac-modules/environment-wrapper"
+  branch_name                         = "feature/PEER-541-test-pull-request-preview-workflow"
+  source_environment_branch_name      = module.staging.branch_name
+  source_environment_dbms_instance_id = module.staging.postgresql_dbms_instance_id
+  short_commit_sha                    = var.short_commit_sha
+  gcp_project_id                      = var.gcp_project_id
+  gcp_location                        = var.gcp_location
+  gcp_docker_artifact_repository_name = var.gcp_docker_artifact_repository_name
+  depends_on                          = [module.gcp_apis, module.staging]
+}
+
 
 # # Second Approach (GCP)
 # # # Create production environment
