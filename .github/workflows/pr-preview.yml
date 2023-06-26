@@ -122,6 +122,7 @@ jobs: # A workflow can have multiple jobs
           npx nx affected --target build --parallel 3
 
   build:
+    needs: [pr-checks]
     runs-on: ubuntu-latest
     # environment:
     #   name: peerlab-preview
