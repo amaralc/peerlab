@@ -221,6 +221,15 @@ jobs: # A workflow can have multiple jobs
             echo "is_existing_image=true" >> $GITHUB_ENV
           fi
 
+      - name: Use the node_modules cache if available [yarn]
+        # if: env.package_manager == 'yarn'
+        uses: actions/cache@v2
+        with:
+          path: ${{ env.yarn_cache_dir_path }}
+          key: ${{ runner.os }}-node-${{ env.node_version }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-node-${{ env.node_version }}-
+
       - name: Check if app was affected
         if: ${{ env.is_existing_image == 'true' }}
         run: |
