@@ -286,7 +286,7 @@ jobs: # A workflow can have multiple jobs
         uses: docker/build-push-action@v4
         with:
           context: .
-          file: ./apps/researchers/peers/svc-rest-api/dockerfile.github-actions
+          file: ./apps/researchers/peers/svc-rest-api/Dockerfile.GitHubActions
           push: true
           no-cache: true # TODO: Check if this is necessary
           build-args: BRANCH_NAME=${{ env.branch_name }}
@@ -298,70 +298,70 @@ jobs: # A workflow can have multiple jobs
         run: |
           bash scripts/nx/set-token.sh --access-token=fake-token
 
-  # deploy:
-  #   needs: [build]
-  #   runs-on: ubuntu-latest
-  #   environment:
-  #     name: core-platform-shell-iac-preview
-  #   defaults:
-  #     run:
-  #       working-directory: ${{ github.workspace }}
+  deploy:
+    needs: [build]
+    runs-on: ubuntu-latest
+    environment:
+      name: core-platform-shell-iac-preview
+    defaults:
+      run:
+        working-directory: ${{ github.workspace }}
 
-  #   steps:
-  #     - name: Extract environment name
-  #       run: |
-  #         echo $GITHUB_REF
-  #         echo $GITHUB_HEAD_REF
-  #         branch_name=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}
-  #         parsed_branch_name=$(echo "$branch_name" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/-/g') # Replace special characters with dashes, and upper case letters by lowercase letters
-  #         echo "parsed_branch_name=$parsed_branch_name" >> $GITHUB_ENV
+    steps:
+      - name: Extract environment name
+        run: |
+          echo $GITHUB_REF
+          echo $GITHUB_HEAD_REF
+          branch_name=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}
+          parsed_branch_name=$(echo "$branch_name" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/-/g') # Replace special characters with dashes, and upper case letters by lowercase letters
+          echo "parsed_branch_name=$parsed_branch_name" >> $GITHUB_ENV
 
-  #     - name: Get short commit hash
-  #       run: |
-  #         SHORT_SHA=${{ github.sha }}
-  #         echo "short_commit_sha=${SHORT_SHA:0:8}" >> $GITHUB_ENV
+      - name: Get short commit hash
+        run: |
+          SHORT_SHA=${{ github.sha }}
+          echo "short_commit_sha=${SHORT_SHA:0:8}" >> $GITHUB_ENV
 
-  #     - name: Checkout branch
-  #       uses: actions/checkout@v3
+      - name: Checkout branch
+        uses: actions/checkout@v3
 
-  #     - name: Save GCP credentials to file
-  #       run: |
-  #         echo '${{ secrets.GCP_TF_ADMIN_SERVICE_ACCOUNT_KEY }}' > apps/core/platform-shell-iac/preview/credentials.json
+      - name: Save GCP credentials to file
+        run: |
+          echo '${{ secrets.GCP_TF_ADMIN_SERVICE_ACCOUNT_KEY }}' > apps/core/platform-shell-iac/preview/credentials.json
 
-  #     - id: "auth"
-  #       name: "Authenticate to Google Cloud"
-  #       uses: "google-github-actions/auth@v1"
-  #       with:
-  #         credentials_json: ${{ secrets.GCP_TF_ADMIN_SERVICE_ACCOUNT_KEY }}
+      - id: "auth"
+        name: "Authenticate to Google Cloud"
+        uses: "google-github-actions/auth@v1"
+        with:
+          credentials_json: ${{ secrets.GCP_TF_ADMIN_SERVICE_ACCOUNT_KEY }}
 
-  #     - name: "Set up Cloud SDK"
-  #       uses: "google-github-actions/setup-gcloud@v1"
+      - name: "Set up Cloud SDK"
+        uses: "google-github-actions/setup-gcloud@v1"
 
-  #     - name: Set up Terraform
-  #       uses: hashicorp/setup-terraform@v2
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v2
 
-  #     - name: Terraform init
-  #       run: |
-  #         echo "Running terraform init..."
-  #         echo ""
-  #         terraform init -backend-config='prefix=${{ env.parsed_branch_name }}' # Set the backend prefix as the parsed branch name (environment name)
-  #       working-directory: apps/core/platform-shell-iac/preview
+      - name: Terraform init
+        run: |
+          echo "Running terraform init..."
+          echo ""
+          terraform init -backend-config='prefix=${{ env.parsed_branch_name }}' # Set the backend prefix as the parsed branch name (environment name)
+        working-directory: apps/core/platform-shell-iac/preview
 
-  #     - name: Terraform validate
-  #       run: |
-  #         echo "Running terraform validate..."
-  #         terraform validate
-  #       working-directory: apps/core/platform-shell-iac/preview
+      - name: Terraform validate
+        run: |
+          echo "Running terraform validate..."
+          terraform validate
+        working-directory: apps/core/platform-shell-iac/preview
 
-  #     - name: Terraform Plan
-  #       run: |
-  #         echo "Running terraform plan..."
-  #         echo "Commit Hash: ${{ env.short_commit_sha }}"
-  #         terraform plan -out=tfplan -var "gcp_project_id=${{ secrets.GCP_PROJECT_ID }}" -var  "gcp_location=${{ secrets.GCP_LOCATION }}" -var "short_commit_sha=${{ env.short_commit_sha }}" -var "vercel_api_token=${{ secrets.VERCEL_API_TOKEN }}" -var "core_platform_shell_browser_vercel_project_id=${{ secrets.CORE_PLATFORM_SHELL_BROWSER_VERCEL_PROJECT_ID }}" -var "core_root_shell_graph_vercel_project_id=${{ secrets.CORE_ROOT_SHELL_GRAPH_VERCEL_PROJECT_ID }}" -var "dx_dev_docs_browser_vercel_project_id=${{ secrets.DX_DEV_DOCS_BROWSER_VERCEL_PROJECT_ID }}" -var "gcp_organization_id=${{ secrets.GCP_ORGANIZATION_ID }}" -var "gcp_billing_account_id=${{ secrets.GCP_BILLING_ACCOUNT_ID }}"
-  #       working-directory: apps/core/platform-shell-iac/preview
+      - name: Terraform Plan
+        run: |
+          echo "Running terraform plan..."
+          echo "Commit Hash: ${{ env.short_commit_sha }}"
+          terraform plan -out=tfplan -var "gcp_project_id=${{ secrets.GCP_PROJECT_ID }}" -var  "gcp_location=${{ secrets.GCP_LOCATION }}" -var "short_commit_sha=${{ env.short_commit_sha }}" -var "vercel_api_token=${{ secrets.VERCEL_API_TOKEN }}" -var "core_platform_shell_browser_vercel_project_id=${{ secrets.CORE_PLATFORM_SHELL_BROWSER_VERCEL_PROJECT_ID }}" -var "core_root_shell_graph_vercel_project_id=${{ secrets.CORE_ROOT_SHELL_GRAPH_VERCEL_PROJECT_ID }}" -var "dx_dev_docs_browser_vercel_project_id=${{ secrets.DX_DEV_DOCS_BROWSER_VERCEL_PROJECT_ID }}" -var "gcp_organization_id=${{ secrets.GCP_ORGANIZATION_ID }}" -var "gcp_billing_account_id=${{ secrets.GCP_BILLING_ACCOUNT_ID }}"
+        working-directory: apps/core/platform-shell-iac/preview
 
-  #     - name: Terraform Apply
-  #       run: |
-  #         echo "Running terraform apply..."
-  #         terraform apply -auto-approve tfplan
-  #       working-directory: apps/core/platform-shell-iac/preview
+      - name: Terraform Apply
+        run: |
+          echo "Running terraform apply..."
+          terraform apply -auto-approve tfplan
+        working-directory: apps/core/platform-shell-iac/preview
