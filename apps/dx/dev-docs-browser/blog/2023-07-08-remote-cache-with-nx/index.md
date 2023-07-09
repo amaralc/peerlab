@@ -125,6 +125,10 @@ fi
 jq --arg access_token "$ACCESS_TOKEN" '.tasksRunnerOptions.default.options.accessToken = $access_token' nx.json > tmp.$$.json && mv tmp.$$.json nx.json
 ```
 
+### Using Google Cloud Storage for Remote Cache
+
+If you want to use Google Cloud Storage for your remote cache, you can find instructions in this [GitHub issue](https://github.com/nrwl/nx/issues/14126#issuecomment-1464923017). But please note, we haven't personally tested this setup yet.
+
 ## Github Actions Workflow
 
 In our GitHub Actions workflow, we can now correctly set the token by invoking the aforementioned script as a step before initiating the lint and test process:
@@ -292,9 +296,13 @@ Under the "Time Saved" tab, you can also see how many minutes were saved in CI d
 
 ## Conclusion and Known Issues
 
-By integrating Nx Cloud and employing a touch of scripting, we have managed to craft a secure and efficient CI/CD pipeline. This pipeline effectively utilizes the distributed caching mechanism provided by Nx Cloud to expedite our build times.
+By integrating Nx Cloud and employing a touch of scripting, we have managed to craft a secure and efficient CI/CD pipeline. This pipeline effectively uses the distributed caching mechanism provided by Nx Cloud to decrease our build times.
 
-However, while this solution is impressive, it is not without its limitations. For instance, it's essential to be aware of the influence of environment variables and their impact on the cache. If an environment variable is altered, we would desire a fresh build that doesn't rely on the cache. We'll address this issue, along with others, in upcoming articles.
+However, while this solution is impressive, it is not without its limitations. For instance, it's essential to be aware of the influence of environment variables and their impact on the cache. If an environment variable is altered, we would desire a fresh build that doesn't rely on the cache.
+
+Other thing we noticed is that the Nx daemon does not work properly in Docker containers, so if you are nx build inside a Dockerfile, it will probably not make use of the remote cache as expected. [This GitHub issue](https://github.com/nrwl/nx/issues/14126) provides more details on this topic.
+
+We'll address this issue, along with others, in upcoming articles.
 
 Until next time!
 
@@ -312,3 +320,4 @@ Until next time!
 - Nx. (n.d.). Access Tokens, Nx Docs. Retrieved July 8, 2023, from https://nx.dev/nx-cloud/account/access-tokens
 - Xiong, E. (2022, June 1). Speed up your Yarn Workspace with Nx, Medium. Retrieved from https://blog.nrwl.io/speed-up-your-yarn-workspace-with-nx-bc7ce99a6c64
 - nrwl. (2020, September 2). Document meaning of accessToken in nx.json tasksRunnerOptions/default and whether to commit to a public repo · Issue #3649 · nrwl/nx, GitHub. Retrieved from https://github.com/nrwl/nx/issues/3649
+- nrwl. (2023, January 4). Nx daemon not available in docker containers · Issue #14126 · nrwl/nx, GitHub. Retrieved from https://github.com/nrwl/nx/issues/14126
