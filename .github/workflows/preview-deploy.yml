@@ -222,7 +222,7 @@ jobs: # A workflow can have multiple jobs
           fi
 
       - name: Get yarn cache directory path
-        if: env.package_manager == 'yarn'
+        # if: env.package_manager == 'yarn'
         id: yarn-cache-dir-path
         run: echo "yarn_cache_dir_path=$(yarn cache dir)" >> $GITHUB_ENV
 
