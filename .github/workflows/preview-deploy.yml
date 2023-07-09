@@ -237,7 +237,7 @@ jobs: # A workflow can have multiple jobs
 
       - name: Install dependencies
         run: |
-          yarn install
+          yarn install --frozen-lockfile
 
       - name: Check if app was affected
         if: ${{ env.is_existing_image == 'true' }}
