@@ -221,6 +221,11 @@ jobs: # A workflow can have multiple jobs
             echo "is_existing_image=true" >> $GITHUB_ENV
           fi
 
+      - name: Get yarn cache directory path
+        if: env.package_manager == 'yarn'
+        id: yarn-cache-dir-path
+        run: echo "yarn_cache_dir_path=$(yarn cache dir)" >> $GITHUB_ENV
+
       - name: Use the node_modules cache if available [yarn]
         # if: env.package_manager == 'yarn'
         uses: actions/cache@v2
